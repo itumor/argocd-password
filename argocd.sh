@@ -40,10 +40,11 @@ if echo [[ "${LOGIN_OUTPUT}" == *"rpc error: code = Unauthenticated desc = Inval
 
     kubectl port-forward svc/argocd-server -n argocd 8080:443 &
 
+
     #argocd account update-password --insecure --current-password=${ARGOCD_PASSWORD} --new-password=${NEW_ARGOCD_PASSWORD}
     NEW_ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d )
     echo "Attempt to login with the new password"
-    echo ${NEW_ARGOCD_PASSWORD}
+    #echo ${NEW_ARGOCD_PASSWORD}
     # Attempt to login with the new password
     LOGIN_OUTPUT=$(argocd login ${ARGOCD_SERVER} --insecure  --username=${ARGOCD_USERNAME} --password=${NEW_ARGOCD_PASSWORD} 2>&1)
     
@@ -61,3 +62,5 @@ else
 fi
 
 argocd app create jsonnet-guestbook --repo https://github.com/argoproj/argocd-example-apps.git --path jsonnet-guestbook --dest-namespace default --dest-server https://kubernetes.default.svc
+
+#echo ${NEW_ARGOCD_PASSWORD}
